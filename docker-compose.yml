@@ -8,8 +8,8 @@ services:
     environment: 
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
     networks:
       - wp
   phpmyadmin:
@@ -25,6 +25,8 @@ services:
     networks:
       - wp
   wordpress:
+    ports:
+      - "${PORT}:80"
     depends_on: 
       - db
     image: wordpress:latest
@@ -33,11 +35,8 @@ services:
       - ./wp-content:/var/www/html
     environment: 
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-    ports:
-      - '8000:80'
-      - '443:443'
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: password
     networks:
       - wp
 networks:
